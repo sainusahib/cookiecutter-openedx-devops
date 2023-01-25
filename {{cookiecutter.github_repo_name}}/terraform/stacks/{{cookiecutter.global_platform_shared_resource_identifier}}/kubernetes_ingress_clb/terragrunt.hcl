@@ -14,13 +14,14 @@ locals {
   stack_namespace = local.stack_vars.locals.stack_namespace
   namespace       = "kube-system"
   root_domain     = local.global_vars.locals.root_domain
-  admin_domain    = local.global_vars.locals.admin_domain
+  services_subdomain    = local.global_vars.locals.services_subdomain
 }
 
 dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
+    "../kubernetes_vpa",
     ]
 }
 
@@ -29,12 +30,34 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     public_subnets   = ["fake-public-subnet-01", "fake-public-subnet-02"]
     private_subnets  = ["fake-private-subnet-01", "fake-private-subnet-02"]
     database_subnets = ["fake-database-subnet-01", "fake-database-subnet-02"]
+  }
+
+}
+
+dependency "kubernetes" {
+  config_path = "../kubernetes"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
+  mock_outputs = {
+  }
+
+}
+
+dependency "kubernetes_vpa" {
+  config_path = "../kubernetes_vpa"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
+  mock_outputs = {
   }
 
 }
@@ -55,5 +78,5 @@ inputs = {
   namespace       = local.namespace
   stack_namespace = local.stack_namespace
   root_domain     = local.root_domain
-  admin_domain    = local.admin_domain
+  services_subdomain    = local.services_subdomain
 }

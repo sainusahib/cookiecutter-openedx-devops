@@ -8,8 +8,8 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   # Extract out common variables for reuse
   kubernetes_name       = local.environment_vars.locals.shared_resource_namespace
@@ -21,7 +21,6 @@ locals {
 
   tags = merge(
     local.environment_vars.locals.tags,
-    local.global_vars.locals.tags,
     { Name = "${local.environment_vars.locals.environment_namespace}" }
   )
 
@@ -40,7 +39,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
@@ -54,7 +53,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
     cluster_arn           = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"

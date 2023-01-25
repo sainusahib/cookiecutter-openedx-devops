@@ -8,18 +8,17 @@
 #------------------------------------------------------------------------------
 locals {
   # Automatically load stack-level variables
-  stack_vars = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
-  global_vars      = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  global_vars = read_terragrunt_config(find_in_parent_folders("global.hcl"))
+  stack_vars  = read_terragrunt_config(find_in_parent_folders("stack.hcl"))
 
-  root_domain             = local.global_vars.locals.root_domain
+  services_subdomain      = local.global_vars.locals.services_subdomain
   resource_name           = local.stack_vars.locals.stack_namespace
   mysql_instance_class    = local.stack_vars.locals.mysql_instance_class
   mysql_allocated_storage = local.stack_vars.locals.mysql_allocated_storage
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.resource_name}" }
+    { "cookiecutter/name" = "${local.resource_name}" }
   )
 
 }
@@ -33,7 +32,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
@@ -46,7 +45,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     cluster_arn           = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
@@ -81,7 +80,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   # AWS RDS instance identifying information
-  root_domain           = local.root_domain
+  services_subdomain          = local.services_subdomain
   resource_name         = local.resource_name
   tags                  = local.tags
 

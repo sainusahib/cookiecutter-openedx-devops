@@ -6,7 +6,9 @@
 #
 # usage: create an EC2 instance with ssh access and a DNS record.
 #------------------------------------------------------------------------------
-
+locals {
+  hostname = "bastion.${var.services_subdomain}"
+}
 resource "aws_instance" "bastion" {
 
   ami               = data.aws_ami.ubuntu.id
@@ -190,9 +192,6 @@ resource "aws_instance" "bastion" {
 #                        SUPPORTING RESOURCES
 #------------------------------------------------------------------------------
 
-data "aws_route53_zone" "stack" {
-  name = var.root_domain
-}
 
 # Ubuntu 20.04 LTS AMI
 # see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami_ids
@@ -262,20 +261,11 @@ resource "aws_security_group" "sg_bastion" {
 
 # Create a static IP address and a DNS record to
 # add to the root domain.
-resource "aws_eip" "elasticip" {
+resource "aws_eip" "bastion" {
   instance = aws_instance.bastion.id
   tags     = var.tags
 }
 
-resource "aws_route53_record" "bastion" {
-  zone_id = data.aws_route53_zone.stack.id
-  name    = "bastion.${var.root_domain}"
-  type    = "A"
-  ttl     = "600"
-
-
-  records = [aws_eip.elasticip.public_ip]
-}
 
 # private ssh key for public access to the bastion.
 # we'll store this in kubernetes secrets so that we have
@@ -290,21 +280,6 @@ resource "aws_key_pair" "bastion" {
   public_key = tls_private_key.bastion.public_key_openssh
 }
 
-resource "kubernetes_secret" "ssh_secret" {
-  metadata {
-    name      = "bastion-ssh-key"
-    namespace = var.stack_namespace
-  }
-
-  # mcdaniel aug-2022: switch from DNS host name
-  # to EC2 public ip address bc of occasional delays
-  # in updates to Route53 DNS
-  data = {
-    HOST            = aws_instance.bastion.public_ip
-    USER            = "ubuntu"
-    PRIVATE_KEY_PEM = tls_private_key.bastion.private_key_pem
-  }
-}
 
 # Parameterize the bootstrapping script
 data "template_file" "bastion_config" {
@@ -379,8 +354,8 @@ data "template_file" "welcome_banner" {
 data "template_file" "help_text" {
   template = file("${path.module}/etc/update-motd.d/10-help-text.tpl")
   vars = {
-    stack_namespace = var.stack_namespace
-    root_domain     = var.root_domain
-    aws_region      = var.aws_region
+    stack_namespace    = var.stack_namespace
+    services_subdomain = var.services_subdomain
+    aws_region         = var.aws_region
   }
 }

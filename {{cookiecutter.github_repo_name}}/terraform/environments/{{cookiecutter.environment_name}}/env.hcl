@@ -20,8 +20,14 @@ locals {
   # AWS instance sizing
   redis_node_type      = "{{ cookiecutter.redis_node_type }}"
 
-  tags = {
-    Environment = local.environment
-  }
-
+  tags = merge(
+    local.global_vars.locals.tags,
+    {
+      "cookiecutter/environment"                = local.environment
+      "cookiecutter/environment_subdomain"      = local.environment_subdomain
+      "cookiecutter/environment_domain"         = local.environment_domain
+      "cookiecutter/environment_namespace"      = local.environment_namespace
+      "cookiecutter/shared_resource_namespace"  = local.shared_resource_namespace
+    }
+  )
 }

@@ -14,13 +14,14 @@ locals {
   shared_resource_namespace       = local.global_vars.locals.shared_resource_namespace
   aws_region                      = local.global_vars.locals.aws_region
   cert_manager_namespace          = "cert-manager"
-  admin_domain                    = local.global_vars.locals.admin_domain
+  services_subdomain              = local.global_vars.locals.services_subdomain
 }
 
 dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
+    "../kubernetes_vpa",
     "../kubernetes_ingress_clb",
     ]
 }
@@ -30,7 +31,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     public_subnets   = ["fake-public-subnet-01", "fake-public-subnet-02"]
@@ -44,9 +45,19 @@ dependency "kubernetes_ingress_clb" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     cluster_arn = "flake-cluster-arn"
+  }
+}
+
+dependency "kubernetes_vpa" {
+  config_path = "../kubernetes_vpa"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
+  mock_outputs = {
   }
 }
 
@@ -66,4 +77,5 @@ inputs = {
   aws_region              = local.aws_region
   cert_manager_namespace  = local.cert_manager_namespace
   namespace               = local.shared_resource_namespace
+  services_subdomain      = local.services_subdomain
 }

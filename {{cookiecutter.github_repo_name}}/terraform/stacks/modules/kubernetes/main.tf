@@ -68,10 +68,27 @@ module "eks" {
   cluster_version                 = var.kubernetes_cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
-  enable_irsa                     = true
   vpc_id                          = var.vpc_id
   subnet_ids                      = var.private_subnet_ids
   create_cloudwatch_log_group     = false
+  enable_irsa                     = true
+
+  # NOTE:
+  # larger organizations might want to change these two settings
+  # in order to further restrict which IAM users have access to
+  # the AWS EKS Kubernetes Secrets. Note that at cluster creation,
+  # this key is benign since Kubernetes secrets encryption
+  # is not enabled by default.
+  #
+  # AWS EKS KMS console: https://{{ cookiecutter.global_aws_region }}.console.aws.amazon.com/kms/home
+  #
+  # audit your AWS EKS KMS key access by running:
+  # aws kms get-key-policy --key-id ADD-YOUR-KEY-ID-HERE --region {{ cookiecutter.global_aws_region }} --policy-name default --output text
+  create_kms_key                  = var.eks_create_kms_key
+
+  # un-comment this to add more IAM users to the KMS key owners list.
+  #kms_key_owners                  = ["arn:aws:iam::${var.account_id}:user/system/bastion-user/${var.namespace}-bastion"]
+
   tags = merge(
     var.tags,
     # Tag node group resources for Karpenter auto-discovery
@@ -81,11 +98,15 @@ module "eks" {
   )
 
   cluster_addons = {
-    coredns    = {}
-    kube-proxy = {}
+    coredns = {
+      addon_version = "v1.8.7-eksbuild.3"
+    }
+    kube-proxy = {
+      addon_version = "v1.24.9-eksbuild.1"
+    }
     aws-ebs-csi-driver = {
       service_account_role_arn = aws_iam_role.AmazonEKS_EBS_CSI_DriverRole.arn
-      addon_version            = "v1.14.0-eksbuild.1"
+      addon_version            = "v1.14.1-eksbuild.1"
     }
   }
 

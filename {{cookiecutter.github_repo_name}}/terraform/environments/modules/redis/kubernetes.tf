@@ -21,13 +21,14 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
-resource "kubernetes_secret" "secret" {
+resource "kubernetes_secret" "environment_redis" {
   metadata {
     name      = "redis"
     namespace = var.environment_namespace
   }
 
   data = {
-    REDIS_HOST = module.redis.primary_endpoint_address
+    REDIS_KEY_PREFIX = "${var.environment_subdomain}"
+    REDIS_HOST = "redis.primary.${var.environment_domain}"
   }
 }

@@ -1,5 +1,5 @@
-Cookiecutter Tutor Open edX Production Devops Tools
-======================================
+Cookiecutter Open edX Devops Tools
+==================================
 .. image:: https://img.shields.io/badge/hack.d-Lawrence%20McDaniel-orange.svg
   :target: https://lawrencemcdaniel.com
   :alt: Hack.d Lawrence McDaniel
@@ -44,7 +44,11 @@ Cookiecutter Tutor Open edX Production Devops Tools
 |
 
 
-This repository contains a `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_ to create a new repository that includes Terraform code for managing your AWS infrastructure, and Github Actions workflows for building and deploying your Open edX applications.
+Powered by `Cookiecutter <https://github.com/cookiecutter/cookiecutter>`_, Cookiecutter Open edX Devops Tools is a community maintained project template for jumpstarting production-ready, `Kubernetes <https://kubernetes.io/>`_-based installations of the `Open edX <https://openedx.org/>`_ online learning management system running on `AWS <https://aws.amazon.com/>`_ cloud infrastructure that is built and managed with fully parameterized `Terraform <https://www.terraform.io/>`_ and `Github Actions <https://docs.github.com/en/actions>`_ automation scripts. The template offers a number of generation options, we invite you to check the dedicated `docs <https://github.com/lpm0073/cookiecutter-openedx-devops/tree/main/doc>`_ pages to learn more about each of them.
+
+.. image:: doc/cookiecutter-workflow.png
+  :width: 100%
+  :alt: Cookiecutter Workflow
 
 Scalable and Secure
 -------------------
@@ -54,10 +58,6 @@ Builds a fully functional Docker-based, horizontally-scaled Open edX installatio
 .. image:: doc/k9s-console.png
   :width: 100%
   :alt: K9S Console Screenshot
-
-.. image:: doc/ec2-bastion.png
-  :width: 100%
-  :alt: Bastion Welcome Screen
 
 Complete Kubernetes Auto scaling
 --------------------------------
@@ -167,7 +167,7 @@ Now run it against this repo, using the following example usage pattern:
                 global_account_id=012345678912 \
                 global_root_domain=schoolofrock.edu \
                 global_aws_route53_hosted_zone_id=Z123456789ABCDEFGHIJK \
-                environment_name=live \
+                environment_name=prod \
                 environment_subdomain=courses
 
 
@@ -313,7 +313,18 @@ We also recommend that you install `k9s <https://k9scli.io/>`_, a popular tool f
   terragrunt run-all apply
 
 
-IV. Connect To Your backend Services
+IV. Connect To Your new bastion server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+v1.01 introduced a newly designed bastion server with a complete set of preinstalled and preconfigured software for adminstering your
+Open edX platform.
+
+.. image:: doc/ec2-bastion.png
+  :width: 100%
+  :alt: Bastion Welcome Screen
+
+
+V. Connect To Your backend Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Terraform creates friendly subdomain names for any of the backend services which you are likely to connect: Cloudfront, MySQL, Mongo and Redis.
@@ -337,7 +348,7 @@ Specifically with regard to MySQL, several 3rd party analytics tools provide out
   :alt: Connecting to MySQL Workbench
 
 
-V. Manage your new Kubernetes cluster
+VI. Manage your new Kubernetes cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installs four of the most popular web applications for Kubernetes administration:
@@ -350,7 +361,7 @@ Installs four of the most popular web applications for Kubernetes administration
   - pwd: prom-operator
 
 
-VI. Add more Kubernetes admins
+VII. Add more Kubernetes admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default your AWS IAM user account will be the only user who can view, interact with and manage your new Kubernetes cluster. Other IAM users with admin permissions will still need to be explicitly added to the list of Kluster admins.
@@ -501,7 +512,7 @@ Why Use Terragrunt?
 Get Involved!
 -------------
 
-Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becomming a contributor to this project.
+Contributors are welcome. Contact me here: `lawrencemcdaniel.com <https://lawrencemcdaniel.com/contact>`_ if you're interested in becoming a contributor to this project.
 
 Local Development Quick Start
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -527,12 +538,12 @@ Special Thanks
 Special thanks go out to several folks in the open source community who've already made signficant contributions to this project, even if they're not actually aware.
 
 - to `Régis Behmo <https://overhang.io/>`_ for creating Tutor, where the real magic happens. Without Tutor you wouldn't be reading this right now.
-- to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who architected the Kubernetes-based deployment of Open edX and wrote nearly all of the early versions of the CI and Terraform code.
-- to `Anton Putra <https://antonputra.com/>`_ for his great techical how-to articles on using ALB with EKS.
-- to `Harshet Jain <https://www.linkedin.com/in/harshet-jain/>`_ for publishing a `great article <https://betterprogramming.pub/with-latest-updates-create-amazon-eks-fargate-cluster-and-managed-node-group-using-terraform-bc5cfefd5773>`_ on how to implement an AWS Elastic Kubernetes Fargate Cluster.
+- to `Miguel Afonso <https://www.linkedin.com/in/mmafonso/>`_, who architected the original Kubernetes-based deployment of Open edX and wrote nearly all of the early versions of the CI and Terraform code.
+- to `Anton Putra <https://antonputra.com/>`_ for his great techical how-to articles on AWS EKS.
 - to the guys at `hastexo/tutor-contrib-s3 <https://github.com/hastexo/tutor-contrib-s3>`_, who lead the effort to create a version of their AWS S3 plugin that works with this code base.
 - to the guys at `U.S. General Services Administration <https://open.gsa.gov>`_ for open-sourcing their `ALB Ingress Controller installer <https://github.com/GSA/terraform-kubernetes-aws-load-balancer-controller>`_.
 - to the guys at `Cookiecutter Django <https://github.com/cookiecutter/cookiecutter-django>`_ on which I relied heavily for coding examples for this project.
+- to the guys at `MRI Online <https://mrionline.com/>`_ for their many contributions to this project.
 - to `Querium Corp <https://querium.com/>`_, who generously allowed me to open-source this repository.
 - to `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_, who created and still use the original version of this code base to manage their production Open edX environment.
 - to `Turn The Bus <https://turnthebus.org/>`_, for helping me with the requisite code refactoring that preceded publication of this Cookiecutter template.
@@ -545,5 +556,8 @@ Several large-scale Open edX installations already use this code base to manage 
 - `UK Cabinet Office <https://www.gov.uk/government/organisations/cabinet-office>`_
 - `Stepwise Math <https://stepwisemath.ai/>`_
 - `Turn The Bus <https://app.turnthebus.org/>`_
-- `University of South Florida MUMA College of Business <https://www.usf.edu/business//>`_
+- `University of South Florida MUMA College of Business <https://www.usf.edu/business/>`_
 - `MRI Online <https://mrionline.com/>`_
+- `University of British Columbia Learn ExL <https://www.ubc.ca/>`_
+- `blend-ed <https://blend-ed.com/>`_
+- `YAM <https://yam-edu.com/>`_

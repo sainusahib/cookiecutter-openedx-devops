@@ -21,6 +21,7 @@ locals {
   aws_region                      = local.global_vars.locals.aws_region
   shared_resource_identifier      = local.global_vars.locals.shared_resource_identifier
   kubernetes_version              = local.stack_vars.locals.kubernetes_version
+  eks_create_kms_key              = local.stack_vars.locals.eks_create_kms_key
   eks_worker_group_instance_type  = local.stack_vars.locals.eks_worker_group_instance_type
   eks_worker_group_min_size       = local.stack_vars.locals.eks_worker_group_min_size
   eks_worker_group_max_size       = local.stack_vars.locals.eks_worker_group_max_size
@@ -32,8 +33,7 @@ locals {
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
-    { Name = "${local.namespace}-eks" }
+    { "cookiecutter/name" = "${local.namespace}-eks" }
   )
 }
 
@@ -42,7 +42,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     public_subnets   = ["fake-public-subnet-01", "fake-public-subnet-02"]
@@ -74,6 +74,7 @@ inputs = {
   public_subnet_ids = dependency.vpc.outputs.public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
   kubernetes_cluster_version = local.kubernetes_version
+  eks_create_kms_key = local.eks_create_kms_key
   eks_worker_group_instance_type  = local.eks_worker_group_instance_type
   eks_worker_group_min_size = local.eks_worker_group_min_size
   eks_worker_group_max_size = local.eks_worker_group_max_size

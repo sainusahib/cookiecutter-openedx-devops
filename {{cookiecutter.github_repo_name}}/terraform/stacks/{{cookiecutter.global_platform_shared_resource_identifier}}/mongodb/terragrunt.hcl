@@ -15,13 +15,12 @@ locals {
   mongodb_instance_type     = local.stack_vars.locals.mongodb_instance_type
   mongodb_allocated_storage = local.stack_vars.locals.mongodb_allocated_storage
   platform_name             = local.global_vars.locals.platform_name
-  root_domain               = local.global_vars.locals.root_domain
+  services_subdomain        = local.global_vars.locals.services_subdomain
   aws_region                = local.global_vars.locals.aws_region
   resource_name             = "${local.stack_namespace}-mongodb"
 
   tags = merge(
     local.stack_vars.locals.tags,
-    local.global_vars.locals.tags,
     { Name = local.resource_name }
   )
 
@@ -36,7 +35,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     database_subnets = ["fake-subnetid-01", "fake-subnetid-02"]
@@ -49,7 +48,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     cluster_arn           = "fake-cluster-arn"
     cluster_certificate_authority_data = "fake-cert"
@@ -75,6 +74,8 @@ dependency "bastion" {
   config_path = "../ec2_bastion"
   skip_outputs = true
 
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
+  mock_outputs = {}
 }
 
 dependency "mongodb_volume" {
@@ -82,7 +83,7 @@ dependency "mongodb_volume" {
   config_path = "../mongodb_volume"
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     mongodb_volume_id = "fake-volume-id"
     mongodb_volume_arn = "fake-volume-arn"
@@ -112,7 +113,7 @@ include {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   platform_name         = local.platform_name
-  root_domain           = local.root_domain
+  services_subdomain    = local.services_subdomain
   aws_region            = local.aws_region
   stack_namespace       = local.stack_namespace
   resource_name         = local.resource_name

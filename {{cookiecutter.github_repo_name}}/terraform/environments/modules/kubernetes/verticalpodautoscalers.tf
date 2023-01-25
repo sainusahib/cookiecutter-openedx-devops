@@ -150,35 +150,3 @@ resource "kubectl_manifest" "smtp" {
     kubernetes_namespace.environment_namespace
   ]
 }
-
-resource "kubectl_manifest" "nginx" {
-  yaml_body = data.template_file.vpa-nginx.rendered
-
-  depends_on = [
-    kubernetes_namespace.environment_namespace
-  ]
-}
-
-resource "kubectl_manifest" "cert-manager" {
-  yaml_body = data.template_file.vpa-cert-manager.rendered
-
-  depends_on = [
-    kubernetes_namespace.environment_namespace
-  ]
-}
-
-resource "kubectl_manifest" "cert-manager-cainjector" {
-  yaml_body = data.template_file.vpa-cert-manager-cainjector.rendered
-
-  depends_on = [
-    kubernetes_namespace.environment_namespace
-  ]
-}
-
-resource "kubectl_manifest" "cert-manager-webhook" {
-  yaml_body = data.template_file.vpa-cert-manager-webhook.rendered
-
-  depends_on = [
-    kubernetes_namespace.environment_namespace
-  ]
-}

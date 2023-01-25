@@ -5,6 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.18] (2023-1-23)
+
+- convert defalt stack certificate.yml to a template to parameterize name and namespace
+- ensure that the secret name of all cert requests matches the domain name of the request itself
+
+## [1.0.17] (2023-1-21)
+
+- add aws eks update-kubeconfig call ahead of annotating service account for AWS EBS CSI Driver
+- add Terraform outputs to environments/modules/acm so that Terragrunt run-all won't complain
+- parameterize environment ingress and certificate manifests
+- parameterize REDIS_KEY_PREFIX in redis environment configuration
+
+## [1.0.16] (2023-1-17)
+
+- add a kms_key_owners list to AWS EKS stack
+- add Cookiecutter parameter documentation
+
+## [1.0.15] (2023-1-16)
+
+- move redis module from environment to stack
+- add tags to all redis resources
+- fix all redis module deprecation warnings
+- refactor redis security group from module to direct terraform resource declaration
+
+## [1.0.14] (2023-1-15)
+
+- set stack mysql k8s secret HOST to route53 subdomain
+- add a more complete set of outputs to each stack module
+- add missing cluster name and namespace to build workflow
+- add complete mock inputs and dependency declarations through environment hcl files.
+
+## [1.0.13] (2023-1-14)
+
+- minor bug fixes after fully testing a build from scratch.
+- ensure that sudo apt get install operations do not solicit input
+
+## [1.0.12] (2023-1-13)
+
+- refactor environment tags
+- parameterize stack name references in environment modules
+- remove nginx vpa manifest from environment ingress module
+
+## [1.0.11] (2023-1-12)
+
+- refactor AWS resource tags
+- set global_platform_shared_resource_identifier=service
+- bugs fixes related to refactoring of bastion, MongoDB, and Kubernetes
+- refine Terragrunt Kubernetes dependencies
+
+## [1.0.10] (2023-1-12)
+
+- refactor endpoints for all stack services: mysql, mongodb, redis, grafana, dashboard, kubeapps
+- refactor aws resource tags to format of "cookiecutter/name-of-the-tag"
+- rename Cookiecutter default global_platform_shared_resource_identifier=service
+- move VPA manifest for metrics-server to kubernetes_vpa, since its a dependency
+- pin each EKS Add-On version
+- enhance Terragrunt stack dependency tree
+- remove nginx ingress CLB DNS records from root domain
+
+## [1.0.9] (2023-1-11)
+
+- refactor Prometheus into its own module
+- refactor metrics-server into its own module
+- refactor Vertical Pod Autoscaler into its own module
+- bump all Helm chart versions
+- add more Cookiecutter parameters
+
+Note: this concludes the Kubernetes refactoring exercise. Happy new year!
+
 ## [1.0.8] (2023-1-9)
 
 - refactor karpenter into its own module.
@@ -139,7 +208,7 @@ General production release
 
 ## [0.0.3] - 2022-03-20
 
-- added Cookiecutter parameters for environment_subdomain, ci_build_open_edx_version, ci_build_tutor_version, all teraform version constraints
+- added Cookiecutter parameters for environment_subdomain, ci_deploy_open_edx_version, ci_build_tutor_version, all teraform version constraints
 - split environment_name and environment_subdomain
 - added Cookiecutter post hook to process selection of EKS Load Balancer configuration
 - added scripts to make, test, lint

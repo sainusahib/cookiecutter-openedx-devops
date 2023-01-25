@@ -17,7 +17,7 @@ locals {
   tags = merge(
     local.stack_vars.locals.tags,
     local.global_vars.locals.tags,
-    { Name = "${local.stack_namespace}-eks" }
+    { Name = "${local.stack_namespace}-karpenter" }
   )
 }
 
@@ -25,7 +25,8 @@ dependencies {
   paths = [
     "../vpc",
     "../kubernetes",
-    "../kubernetes_monitoring",
+    "../kubernetes_metricsserver",
+    "../kubernetes_prometheus",
     ]
 }
 
@@ -34,7 +35,7 @@ dependency "vpc" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "destroy"]
   mock_outputs = {
     vpc_id           = "fake-vpc-id"
     public_subnets   = ["fake-public-subnet-01", "fake-public-subnet-02"]
@@ -49,7 +50,7 @@ dependency "kubernetes" {
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan"]
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
   mock_outputs = {
     karpenter_node_group_iam_role_name = "fake-karpenter-node-group-iam-role-name"
     karpenter_node_group_iam_role_arn  = "fake-karpenter-node-group-iam-role-arn"
@@ -58,8 +59,19 @@ dependency "kubernetes" {
 
 }
 
-dependency "kubernetes_monitoring" {
-  config_path = "../kubernetes_monitoring"
+dependency "kubernetes_metricsserver" {
+  config_path = "../kubernetes_metricsserver"
+
+  # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "validate", "plan", "destroy"]
+  mock_outputs = {
+  }
+
+}
+
+dependency "kubernetes_prometheus" {
+  config_path = "../kubernetes_prometheus"
 
   # Configure mock outputs for the `validate` and `init` commands that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -72,7 +84,7 @@ dependency "kubernetes_monitoring" {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../modules//kubernetes_monitoring"
+  source = "../../modules//kubernetes_karpenter"
 }
 
 # Include all settings from the root terragrunt.hcl file

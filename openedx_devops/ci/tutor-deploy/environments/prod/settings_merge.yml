@@ -1,0 +1,112 @@
+---
+CORS_ORIGIN_ALLOW_ALL: true
+CORS_ORIGIN_WHITELIST:
+- https://infralabs.cloud
+- https://courses.infralabs.cloud
+- https://studio.courses.infralabs.cloud
+CROSS_DOMAIN_CSRF_COOKIE_DOMAIN: "courses.infralabs.cloud"
+CROSS_DOMAIN_CSRF_COOKIE_NAME: native-csrf-cookie
+CSRF_COOKIE_SECURE: true
+CSRF_TRUSTED_ORIGINS: []
+DCS_SESSION_COOKIE_SAMESITE: lax
+DCS_SESSION_COOKIE_SAMESITE_FORCE_ALL: true
+ACTIVATION_EMAIL_SUPPORT_LINK: https://infralabs.cloud/support/
+AWS_SES_REGION_ENDPOINT: email.us-east-1.amazonaws.com
+AWS_SES_REGION_NAME: "us-east-1"
+CREDIT_HELP_LINK_URL: https://infralabs.cloud/support/
+DEFAULT_MOBILE_AVAILABLE: false
+DEFAULT_EMAIL_LOGO_URL: https://cdn.courses.infralabs.cloud
+ENTERPRISE_SUPPORT_URL: https://infralabs.cloud/support/
+ENTERPRISE_TAGLINE: "infralabs"
+FACEBOOK_API_VERSION: v12.0
+FEATURES:
+  ENABLE_CHANGE_USER_PASSWORD_ADMIN: true
+  CERTIFICATES_HTML_VIEW: true
+  PREVIEW_LMS_BASE: "courses.infralabs.cloud/"
+  ENABLE_COURSEWARE_INDEX: true
+  ENABLE_CSMH_EXTENDED: false
+  ENABLE_LEARNER_RECORDS: true
+  ENABLE_LIBRARY_INDEX: true
+  MILESTONES_APP: true
+  ENABLE_PREREQUISITE_COURSES: true
+  ENABLE_DASHBOARD_SEARCH: false
+  AUTH_USE_OPENID_PROVIDER: false
+  AUTOMATIC_AUTH_FOR_TESTING: false
+  CUSTOM_COURSES_EDX: false
+  ENABLE_BULK_ENROLLMENT_VIEW: true
+  ENABLE_COMBINED_LOGIN_REGISTRATION: true
+  ENABLE_CORS_HEADERS: true
+  ENABLE_COUNTRY_ACCESS: false
+  ENABLE_CREDIT_API: false
+  ENABLE_CREDIT_ELIGIBILITY: false
+  ENABLE_CROSS_DOMAIN_CSRF_COOKIE: true
+  ENABLE_DISCUSSION_HOME_PANEL: false
+  ENABLE_DISCUSSION_SERVICE: false
+  ENABLE_EDXNOTES: true
+  ENABLE_ENROLLMENT_RESET: true
+  ENABLE_EXPORT_GIT: false
+  ENABLE_GRADE_DOWNLOADS: true
+  ENABLE_INSTRUCTOR_ANALYTICS: true
+  ENABLE_LTI_PROVIDER: false
+  ENABLE_MKTG_SITE: false
+  ENABLE_MOBILE_REST_API: true
+  ENABLE_OAUTH2_PROVIDER: true
+  ENABLE_PUBLISHER: false
+  ENABLE_READING_FROM_MULTIPLE_HISTORY_TABLES: false
+  ENABLE_SPECIAL_EXAMS: false
+  ENABLE_SYSADMIN_DASHBOARD: true
+  ENABLE_THIRD_PARTY_AUTH: true
+  ENABLE_VIDEO_UPLOAD_PIPELINE: false
+  SHOW_FOOTER_LANGUAGE_SELECTOR: false
+  SHOW_HEADER_LANGUAGE_SELECTOR: false
+ID_VERIFICATION_SUPPORT_LINK: https://infralabs.cloud/support/
+LANGUAGE_CODE: en
+LANGUAGE_COOKIE: openedx-language-preference
+LOGO_URL_PNG: "https://cdn.courses.infralabs.cloud"
+PLATFORM_DESCRIPTION: "Infra Labs"
+PLATFORM_FACEBOOK_ACCOUNT: http://www.facebook.com/
+PLATFORM_NAME: "infralabs"
+PLATFORM_TWITTER_ACCOUNT: ''
+REGISTRATION_EXTRA_FIELDS:
+  city: hidden
+  confirm_email: hidden
+  country: hidden
+  gender: hidden
+  goals: hidden
+  honor_code: hidden
+  level_of_education: hidden
+  mailing_address: hidden
+  terms_of_service: hidden
+  year_of_birth: hidden
+SESSION_COOKIE_DOMAIN: "courses.infralabs.cloud"
+SESSION_COOKIE_NAME: sessionid
+SESSION_COOKIE_SECURE: true
+SOCIAL_AUTH_REDIRECT_IS_HTTPS: true
+SOCIAL_AUTH_RAISE_EXCEPTIONS: false
+SOCIAL_AUTH_BACKEND_ERROR_URL: https://courses.infralabs.cloud/oauth-error
+SOCIAL_MEDIA_FOOTER_URLS:
+  linkedin: https://www.linkedin.com/
+  twitter: https://twitter.com/
+  facebook: https://www.facebook.com/
+SUPPORT_SITE_LINK: https://infralabs.cloud/support/
+TIME_ZONE: America/New_York
+THIRD_PARTY_AUTH_BACKENDS:
+- social_core.backends.google.GoogleOAuth2
+- social_core.backends.facebook.FacebookOAuth2
+WIKI_ENABLED: false
+API_ACCESS_FROM_EMAIL: api-requests@infralabs.cloud
+API_ACCESS_MANAGER_EMAIL: api-access@infralabs.cloud
+BUGS_EMAIL: bugs@infralabs.cloud
+BULK_EMAIL_DEFAULT_FROM_EMAIL: no-reply@infralabs.cloud
+CONTACT_EMAIL: info@infralabs.cloud
+CONTACT_MAILING_ADDRESS: ''
+DEFAULT_FEEDBACK_EMAIL: feedback@infralabs.cloud
+DEFAULT_FROM_EMAIL: registration@infralabs.cloud
+FEEDBACK_SUBMISSION_EMAIL: support@infralabs.cloud
+PARTNER_SUPPORT_EMAIL: support@infralabs.cloud
+PASSWORD_RESET_SUPPORT_LINK: support@infralabs.cloud
+PAYMENT_SUPPORT_EMAIL: billing@infralabs.cloud
+PRESS_EMAIL: press@infralabs.cloud
+SERVER_EMAIL: devops@infralabs.cloud
+TECH_SUPPORT_EMAIL: technical@infralabs.cloud
+UNIVERSITY_EMAIL: university@infralabs.cloud
